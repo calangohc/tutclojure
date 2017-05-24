@@ -39,7 +39,7 @@ Expressões também são listas. Sempre o nome do operador ou função como o pr
     
 #### Exerciso 1.
 
-Traduze esta expressão em Lisp e avalia no seu computador
+* 1.1 - Traduze esta expressão em Lisp e avalia no seu computador
 
 <pre><code>   
     3 * (5 + 9)
@@ -49,7 +49,7 @@ Traduze esta expressão em Lisp e avalia no seu computador
 ; Escreve aqui
 </code></pre>
 
-E isso?
+* 1.2 - E isso?
 
 <pre><code>
     4 * (1 + 2 + 3 + 4 + 5 + 6) * 5 / 10
@@ -103,7 +103,7 @@ Substring :
 
 ### Exerciso 2.
 
-Escreve um teste se a primeiro n caracteres de uma string saos iguais.
+* 2.1 - Escrever um teste se a primeiro 4 caracteres de uma string saos iguais.
 
 <pre><code class="language-klipse">
 ; Escreve aqui
@@ -130,7 +130,7 @@ Criando uma função também com estrutura de lista ... utilizando o função "d
 
 ### Exerciso 3.
 
-Criar um função que receber dois argumentos strings e responde se eles tem as primeiros 4 caracteres iguais.
+* 3.1 - Criar um função que receber dois argumentos strings e responde se eles tem as primeiros 4 caracteres iguais.
 
 Eg. 
 
@@ -144,7 +144,7 @@ Eg.
 </code></pre>
 
 
-Adaptar sua função pra receber as dois argumentos e um numero n e teste as primeiros n caracteres.
+* 3.2 - Adaptar sua função pra receber as dois argumentos e um numero n e teste as primeiros n caracteres.
 
 <pre><code class="language-klipse">
 ; Escreve aqui
@@ -237,7 +237,7 @@ Podemos escrever funções que moda / processar listas.
 
 ### Execrisio 4.
 
-Escreve um função que troca a segunda elemento dos duas listas. Por exemplo 
+* 4.1 - Escreve um função que troca os segundos elementos dos duas listas. Por exemplo :
 
 <pre><code>
     (troc2 '(1 "+" 3) "-") -> (1 "-" 3)
@@ -265,7 +265,7 @@ Escreve um função que troca a segunda elemento dos duas listas. Por exemplo
 (soma '(1 2 3 4 5))
 </code></pre>
 
-### Exerciso 5.
+### Exercício 5.
 
 * 5.1 - Escrever um funciao pra multiplicar cada elemento duma lista vezes 3
 * 5.2 - Escrever um funciao pra produzir o ultimo elemento duma lista.
@@ -325,28 +325,6 @@ Mas precisamos fazer duas coisas :
 (take 10 (q (cycle '(1 2 3 4))))
 </code></pre>
 
-<pre><code class="language-klipse">
-
-(defn add-last [xs x]
-  (if (empty? xs) (list x)
-    (cons (first xs) (add-last (rest xs) x))))
-
-(defn rev1 [xs] 
-  (if (empty? xs) '()
-      (add-last (rev1 (rest xs)) (first xs))))
-
-(defn rev2 [xs] 
-  (if (empty? xs) '()
-    (let []
-      )
-    ))
-
-(let [tests '(() (1) (1 2) (1 2 3) (1 2 3 4))]
-  (list
-	(map rev1 tests)
-  	(map rev2 tests)
-))
-</code></pre>
 
 ----
 
@@ -382,6 +360,9 @@ Podemos passar elas como argumentos :
 (meu-map m2 '(1 2 3 4 5))
           
 </code></pre>
+
+
+
 
 Podemos produzir elas utilizando `partial` pra "customizar" funções que já existe :
 
@@ -421,10 +402,12 @@ Tambem existe um jeito mais curto, usando o #
 
 Em realidade, nao precisamos definir nossa funciao "meu-map". A biblioteca padrão contem varias funções pra tratar listas com outras funções
 
+
 #### Map
 <pre><code class="language-klipse">
     (map (partial * 4) '(1 2 3 4 5))
 </code></pre>
+
 
 #### Filter 
 <pre><code class="language-klipse">
@@ -442,6 +425,53 @@ Em realidade, nao precisamos definir nossa funciao "meu-map". A biblioteca padr�
     (map vector (range 10) (range 10))
 </code></pre>
 
+### Exercício 6
+
+* 6.1 - Escrever um funciao que calcular o raiz quadrada de cada elemento duma lista utilizando o `map` proprio do Clojure. Raiz quadrada 'e `(.sqrt js/Math 3)` 
+
+<pre><code class="language-klipse">
+
+</code></pre>
+
+O funciao `iterate` cria um sequencia infinita com um valor inicial `x` e o funciao, `f` e produz um sequence x f(x) (f (f x)) (f (f (f x))) etc.
+
+<pre><code class="language-klipse">
+
+(take 10 (iterate #(+ % 1) 0))
+</code></pre>
+
+* 6.2 - Escrever um funciao que produz o sequence '(1 4 7 10 13 16 19 22 25 ...)
+
+<pre><code class="language-klipse">
+
+</code></pre>
+
+* 6.3 - Escrever um funciao *rqs* que produz a lista preguisoza (possivalmente infinito) de numeros com suas raizes quadrados. eg. 
+
+<pre>
+(rqs) -> ([0 0]
+ [1 1]
+ [2 1.4142135623730951]
+ [3 1.7320508075688772]
+ [4 2]
+ [5 2.23606797749979]
+ [6 2.449489742783178]
+ [7 2.6457513110645907] 
+ [8 2.8284271247461903] 
+ [9 3] ... )
+</pre>
+
+<pre><code class="language-klipse">
+
+(take 40 (rqs))
+
+</code></pre>
+
+* 6.3 - Escrever um funciao de ordenacao duma lista como "quicksort" utilizando `filter` e recursividade.
+
+<pre><code class="language-klipse">
+
+</code></pre>
 
 ----
 
@@ -545,6 +575,34 @@ Vai ao <a href="page4.html">Pagina 4</a>
 
 </code></pre>
 
+
+
+### Exercício 7
+
+* 7.1 - O que que 'e o estrutura de dados que represente este imagem
+
+* 7.2 - Modar o programa de "mosaico" pra fazer um padrao "checkerboard" :
+
+![Aqui](https://fxfactory.com/downloads/docs/noiseindustries/fxfactorypro/Thumbnails/Checkerboard.jpg) 
+
+
+* 7.3 - Modar o programa de "mosaico" pra fazer um padrao mais interesante.
+
+* 7.4 - Escreve um funciao "histograma" que receber uma lista de dados tipo '(["maca" 43023] ["pera" 14389] ["banana" 866437] ... ) e desenha um histograma, ordenada pela o valor numerico. (Como escreve texto no canvas : https://www.w3schools.com/graphics/canvas_text.asp )
+
+Pode usar esta canvas (chamada "draw4")
+
+<canvas id="draw4" width="700" height="400" style="background:white;">
+
+</canvas>
+
+
+<pre><code class="language-klipse">
+
+
+
+</code></pre>
+ 
 ----
  
   
