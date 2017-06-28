@@ -911,6 +911,8 @@ cd tc/rfw
 lein clean
 lein figwheel
 
+firefox localhost:3449
+
 </code><pre>
 
 
