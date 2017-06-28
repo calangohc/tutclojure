@@ -3,6 +3,7 @@ footer=Copyright Phil Jones, 2017
 projectname=Introdução ao Clojure
 bootswatch=slate
 head_extra=<link rel="stylesheet" type="text/css" href="http://app.klipse.tech/css/codemirror.css">
+final_js=
 ////index.html
 
 [.jumbotron [.container
@@ -604,7 +605,8 @@ Pode usar esta canvas (chamada "draw4")
 </code></pre>
  
 ----
- 
+
+Vai ao <a href="page5.html">Pagina 5</a> 
   
 .]
 .].]
@@ -617,6 +619,299 @@ Pode usar esta canvas (chamada "draw4")
 </script>
 <script src="http://app.klipse.tech/plugin/js/klipse_plugin.js"></script>
 
+////page5.html
+
+[.container [.row 
+[.col-md-12
+
+## Maps
+
+### Keywords 
+
+Comecam com : e sao muito utilizadas comos chaves de maps / estruturas.
+
+<pre><code class="language-klipse">
+
+(let [s {:a 1 :b 2 :c 3}]
+	(get s :a) )
+
+</code></pre>
 
 
+O Clojure pode utilizar uma `keyword` como um funciao pra extrai um valor duma map. 
 
+<pre><code class="language-klipse">
+
+(let [s {:a 1 :b 2 :c 3}]
+	(:b s) )
+
+</code></pre>
+
+Pegar as chaves com `keys`
+
+<pre><code class="language-klipse">
+
+(let [s {:a 1 :b 2 :c 3}]
+	(keys s) )
+
+</code></pre>
+
+Podemos estrair as valores duma map com *destructuring* 
+
+<pre><code class="language-klipse">
+
+(let [s {:a 1 :b 2 :c 3}
+      f (fn [{:keys [a b c]}] (str "a=" a " b=" b " c=" c))]
+	(f s)
+)
+
+</code></pre>
+
+
+Podemos sobre-escreve um valor 
+
+<pre><code class="language-klipse">
+
+(let [s {:a 1 :b 2 :c 3}
+     s2 (conj s {:c 4})  ]
+(:c s2) )
+
+</code></pre>
+
+
+### Exercício 8
+
+* 8.1 Escreve um programa que atualizar qualquer senha menos do que 8 caracteres com algumas caracteres extra, eg. "123" -> "123preciso-um-senha-maior"
+
+<pre><code class="language-klipse">
+
+(let [usuarios [{:nome "paolo" :senha "123"} {:nome "fred" :senha "vbub2k4agsA a"} {:nome "moema" :senha "issoEMeuSenhaDeVerdade"} {:nome "wallace" :senha "senha" }]]
+  
+)
+</code></pre>
+
+----
+
+Vai ao <a href="page6.html">Pagina 6</a> 
+
+
+.] .] .]
+
+<script>
+    window.klipse_settings = {
+        selector: '.language-klipse'// css selector for the html elements you want to klipsify
+    };
+</script>
+<script src="http://app.klipse.tech/plugin/js/klipse_plugin.js"></script>
+
+
+////page6.html
+
+[.container [.row 
+[.col-md-12
+
+## Install Leiningen
+
+[https://leiningen.org/](https://leiningen.org/)
+
+<pre><code>
+
+lein new cl1
+
+cd cl1
+
+</code></pre>
+
+Edita *project.clj*
+
+<pre><code>
+
+(defproject cl1 "0.1.0-SNAPSHOT"
+  :description "FIXME: write description"
+  :url "http://example.com/FIXME"
+  :license {:name "Eclipse Public License"
+            :url "http://www.eclipse.org/legal/epl-v10.html"}
+  :dependencies [[org.clojure/clojure "1.8.0"]]
+
+  :aot [cl1.core]
+  :main cl1.core
+  )
+</code></pre>
+
+
+Edita *src/cl1/core.clj*
+
+<pre><code>
+(ns cl1.core)
+
+(defn f [x] (* x x x))
+
+(defn -main [& args]
+  (println (map f (range 100)))
+  )
+</code></pre>
+
+Executar
+
+<pre><code>
+lein run
+</code></pre>
+
+
+Ou no repl
+
+<pre><code>
+lein repl
+
+(load "core")
+
+(in-ns "cl1.core")
+
+(map f (range 100))
+
+</code></pre>
+
+### Exercício 9
+
+* 9.1 - Cria um arquivo chamada "teste.csv"
+
+<pre>
+mes, banana, laranja, pera
+jan, 432, 542, 564
+fev, 52, 46, 874
+mar, 434, 54, 76
+abr, 345, 342, 655
+mai, 53, 32, 54
+jun, 764, 453, 734
+</pre>
+
+## Lendo arquivos 
+
+Le um arquivo com `slurp`
+
+<pre><code>
+
+(slurp "teste.csv")
+
+</code></pre>
+
+Podemos cortar as strings com `split`
+
+<pre><code>
+
+(split "algumas palavras separadas pelas espacos" #"")
+
+</code></pre>
+
+Obs : #" " 'e notacao de *expressoes regulares* (Regex) que sao utilizadas pela `split`.
+
+Podemos ler um arquivo CSV e convertar pra um estrutura de dados representando uma tabela assim :
+
+<pre><code>
+
+(defn tab [t]
+  (let [lines (str/split t #"\n")
+        dadas (rest lines)
+        f-linha (fn [l] (let [xs (str/split l #",\s+")]
+                         {:mes (first xs) :d (rest xs)}))]
+    {:heads (first lines)
+     :linhas (map f-linha dadas)})
+  )
+
+(defn -main [& args]
+  (let [data (slurp "teste.csv")
+        tabulo (tab data)
+        ]
+    (println tabulo))
+  )
+
+</code></pre>
+
+* 9.1a - Atualizar sua programa como este exemplo acima e comprovar voce pode imprimir seu arquivo.csv
+* 9.2 - Adicionar um funciao pra imprimir o tabelo em HTML eg.
+
+<pre><code>
+&lt;table>
+&lt;tr>&lt;th>mes&lt;/th>&lt;th>banana&lt;/th> ... &lt;/tr>
+&lt;tr>&lt;td>jam&lt;/td>
+...
+
+&lt;/table>
+</code></pre>
+
+* 9.3 - Crie uma funçião que, quando dada uma tabela, calcula a soma e a média de cada coluna. (Se voce preferir reorganizar seu representacao da tabela fica a vontage)
+
+* 9.4 - Pode adicionar funciones pra calcular o máximo e mínimo dos colunas.
+
+## Exploracao de dados abertos
+
+* 9.5 - Procura alguma arquivo CSV interesante no [http://dados.gov.br/](http://dados.gov.br/) baixa, escreve um programa que fazer alguma analysis destes dados.
+
+----
+
+<a href="page7.html">Proxima</a>
+
+.] .] .]
+
+<script>
+    window.klipse_settings = {
+        selector: '.language-klipse'// css selector for the html elements you want to klipsify
+    };
+</script>
+<script src="http://app.klipse.tech/plugin/js/klipse_plugin.js"></script>
+
+//// page7.html
+
+[.container [.row
+[.col-md-12 
+
+## FigWheel 
+
+**(Ambient "Hot" de desenvolvemento ClojureScript)**
+
+
+[GitHub do FigWheel](https://github.com/bhauman/lein-figwheel)
+
+O FigWheel ja esta integrada com Leiningen.
+
+### Criar um projeto de FigWheel com Reagent 
+
+[Reagent](https://reagent-project.github.io/) 'e uma das envelopes de [React.js](https://facebook.github.io/react/) utilizando pela ClojureScript)
+
+<pre><code>
+
+lein new figwheel hello-world -- --reagent
+
+cd hello-world
+ 
+</code></pre>
+
+
+Dentro o hello-world vai encontrar duas arquivos importantes : 
+
+ * project.clj
+ * src/hello-world/core.cljs
+ 
+O `project.clj` esta a configuracao do projeto. Neste momento, nao precisamos mexer com ele.
+
+### Interacao e Animacao
+
+Olha [o projeto](https://github.com/calangohc/tutclojure/tree/master/rfw) que adicionei no [GitHub deste tutorial](https://github.com/calangohc/tutclojure)
+
+O codigo do exemplo de animacao interativo esta no src/hello-world/core.cljs
+
+<script src="http://gist-it.appspot.com/https://github.com/calangohc/tutclojure/blob/master/rfw/src/cljs/rfw/core.cljs"></script>
+
+Executar o App : 
+
+<pre><code>
+
+git clone https://github.com/calangohc/tutclojure/ tc
+cd tc/rfw
+lein clean
+lein figwheel
+
+</code><pre>
+
+
+.] .] .]

@@ -5,44 +5,51 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Vars
+;; O Estado do app fica dentro o reagent/atom "app-state".
+;;
 
 (defonce app-state
-  (reagent/atom {:p {:x 50 :y 150} :d {:x 5 :y 0} :time 0}))
-
+  (reagent/atom {:position {:x 10 :y 150} :direction {:x 5 :y 0} :time 0}))
 
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Page
-
-(defn update! [ratom] (swap! ratom #(conj % {:p {:x (+ (-> % :p :x) (-> % :d :x))
-                                                 :y (+ (-> % :p :y) (-> % :d :y))}
-                                             :time (+ (:time @ratom) 1)})))
+;; O app.
 
 
-(defn new-direction! [ratom dx dy] (swap! ratom update :d (fn [x] {:x dx :y dy})))
+(defn update! [ratom] (swap! ratom #(let [pos (:position %)
+                                          dir (:direction %)]
+                                      (conj % {:position {:x (+ (:x pos) (:x dir))
+                                                          :y (+ (:y pos) (:y dir))}
+                                               :time (+ (:time %) 1)}))))
+
+
+(defn new-direction! [ratom dx dy] (swap! ratom update :direction (fn [x] {:x dx :y dy})))
 
 
 
 (defn page [ratom]
-  (let [direction-button (fn [name dx dy] [:input {:type "button" :value name :on-click #(new-direction! ratom dx dy)} ])  ]
-    [:div
+  (let [direction-button (fn [name dx dy] [:button {:on-click #(new-direction! ratom dx dy)} name  ])
+        pos (:position @ratom)
+        w "800"
+        h "500"]
+    [:div {:style {:font-family "mono"}}
      [:h2 "Jogo"]
      [:div {:id "play"}
-      [:svg {:width "500" :height "300"}
-       [:circle {:cx (-> @ratom :p :x) :cy (-> @ratom :p :y) :r "20" :stroke "green" :stroke-width "10" :fill "blue"}]
+      [:svg {:width w :height h}
+       [:rect {:width w :height h :style {:fill "black"}}]
+       [:circle {:cx (:x pos) :cy (:y pos) :r "10" :stroke "lightblue" :stroke-width "4" :fill "blue"}]
        ]]
 
      [:div {:id "control"}
-      (direction-button "<" -5 0)
-      (direction-button "^" 0 -5)
+      (direction-button "<" -2 0)
+      (direction-button "^" 0 -2)
       (direction-button "X" 0 0)
-      (direction-button "v" 0 5)
-      (direction-button ">" 5 0)
+      (direction-button "v" 0 2)
+      (direction-button ">" 2 0)
 
       ]
-     [:div (str "X: " (-> @ratom :p :x) " Y:" (-> @ratom :p :y) " DX: " (-> @ratom :d :x) " DY: " (-> @ratom :d :y) " Time: " (:time @ratom))]
+     [:div (str "X: " (:x pos) " Y:" (:y pos) " DX: " (:x (:direction @ratom)) " DY: " (:y (:direction @ratom)) " Time: " (:time @ratom))]
 
      ]))
 
